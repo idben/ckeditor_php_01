@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKEditor 5 with Div Example</title>
+  <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+  <style>
+    .ck-editor__editable_inline {
+      min-height: 400px !important;
+      height: 400px !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>CKEditor 5 範例</h1>
+  <div id="editor">
+    <!-- 這裡是初始內容 -->
+    <p>這是一個 CKEditor 5 加 php 上傳圖編輯器的範例。</p>
+  </div>
+  <script>
+      class MyUploadAdapter {
+        constructor(loader) {
+          this.loader = loader;
+        }
+
+        upload() {
+          return this.loader.file
+            .then(file => new Promise((resolve, reject) => {
+              const data = new FormData();
+              data.append('upload', file);
+
+              fetch('upload.php', {
+                method: 'POST',
+                body: data
+              })
+                .then(response => response.json())
+                .then(data => {
+                  resolve({
+                    default: data.url
+                  });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            }));
+        }
+
+        abort() {
+          // If the user aborts the upload, this method is called.
+        }
+      }
+
+      function MyCustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+          return new MyUploadAdapter(loader);
+        };
+      }
+
+      ClassicEditor
+        .create(document.querySelector('#editor'), {
+          extraPlugins: [MyCustomUploadAdapterPlugin]
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+  </script>
+</body>
+</html>
