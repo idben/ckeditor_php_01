@@ -39,10 +39,11 @@
 
 ## 目錄結構
 
-- `index.html`：主頁面，包含 CKEditor 5 編輯器。
-- `upload.php`：處理圖片上傳的 PHP 腳本。
+- `index.html`：主頁面，列表頁，由這頁連到新增、刪除與修改
+- `form.html`：新增頁，包含 CKEditor 5 編輯器，接 doAdd.php 與 upload.php。
+- `upload.php`：處理圖片上傳的 PHP 程式。
+- `doAdd.php`：處理寫入資料表的程式。
+- `form.php`：修改，包含 CKEditor 5 編輯器，目前版本沒有接修改。
 - `uploads/`：上傳的圖片將存儲在此目錄。
-
-## 版本
-
-- CKEditor 5 最新版本
+- `article.sql`：使用的資料庫架構。
+- `PDO_connect.php`：連線物件，使用 PDO。
